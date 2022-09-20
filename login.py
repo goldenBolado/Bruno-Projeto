@@ -24,4 +24,20 @@ Escolha: """))
                 else:
                     senha_lst.append(senha_input)
                     break
+            if home_input == 1:
+            for i in range (len(login_lst)):
+                user_log = str(input('Insira seu login: '))
+                if user_log in login_lst:
+                    print('Login correto')
+                else:
+                    print(f"""\033[m{'Login incorreto':-^50}""")
+                    break
+                user_pass = input('insira sua senha: ')
+                if user_pass in senha_lst:
+                    print('senha correta')
+                    print(f"""\033[m{'Você esta logado':-^50}""")
+                    break
+                else:
+                    print(f"""\033[m{'senha incorreta':-^50}""")
+                    break
     registro(home_input)
