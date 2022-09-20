@@ -12,6 +12,8 @@ Escolha: """))
         if home_input_par == 2:
             while True:
                 login_input = input(f'\033[mRegistre seu login: ')
+                global user_log
+                user_log = login_input
                 if ' ' in login_input:
                     print(f'\033[31mNÃO É PERMITIDO ESPAÇOS')
                 else:
@@ -19,6 +21,8 @@ Escolha: """))
                     break
             while True:
                 senha_input = input(f'\033[mRegistre sua senha: ')
+                global user_pass
+                user_pass = senha_input
                 if ' ' in senha_input:
                     print(f'\033[31mNÃO É PERMITIDO ESPAÇOS')
                 else:
