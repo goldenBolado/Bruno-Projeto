@@ -1,47 +1,82 @@
-login_lst = []
-senha_lst = []
-while True:
-    home_input = int(input(f"""\033[m{'Sorveteria Napolitano':-^50}
-[1] LOGIN
-[2] REGISTRAR
+#   Essa biblioteca é so pra criptografia pra fazer graça :)
+import hashlib
 
-Escolha: """))
-    if home_input > 2 or home_input <= 0:
-        print(f'\033[31mESCOLHA UM OPÇÃO VÁLIDA')
-    def registro():
-        if home_input == 2:
-            while True:
-                login_input = input(f'\033[mRegistre seu login: ')
-                global user_log
-                user_log = login_input
-                if ' ' in login_input:
-                    print(f'\033[31mNÃO É PERMITIDO ESPAÇOS')
-                else:
-                    login_lst.append(login_input)
-                    break
-            while True:
-                senha_input = input(f'\033[mRegistre sua senha: ')
-                global user_pass
-                user_pass = senha_input
-                if ' ' in senha_input:
-                    print(f'\033[31mNÃO É PERMITIDO ESPAÇOS')
-                else:
-                    senha_lst.append(senha_input)
-                    break
-            if home_input == 1:
-                for i in range (len(login_lst)):
-                    user_log = str(input('Insira seu login: '))
-                    if user_log in login_lst:
-                        print('Login correto')
-                    else:
-                        print(f"""\033[m{'Login incorreto':-^50}""")
-                        break
-                    user_pass = input('insira sua senha: ')
-                    if user_pass in senha_lst:
-                        print('senha correta')
-                        print(f"""\033[m{'Você esta logado':-^50}""")
-                        break
-                    else:
-                        print(f"""\033[m{'senha incorreta':-^50}""")
-                        break
-    registro(home_input)
+def registrar():
+    user = input('Registre o usuário: ')
+    pwd = input('Registre a senha: ')
+    conf_pwd = input('Confirme a senha: ')
+    if conf_pwd == pwd:
+        enc = conf_pwd.encode()
+        hash1 = hashlib.md5(enc).hexdigest()
+
+    with open('registros.txt', 'w') as f:
+        f.write(user + '\n')
+        f.write(hash1)
+    f.close()
+    print('Registrado com sucesso!')
+
+
+def login():
+    user = input('Coloque seu usuário: ')
+    pwd = input('Coloque sua senha: ')
+    auth = pwd.encode()
+    auth_hash = hashlib.md5(auth).hexdigest()
+    with open('registros.txt', 'r') as f:
+        stored_user, stored_pwd = f.readlines().split('\n')
+    f.close()
+    if user == stored_user and auth_hash == stored_pwd:
+        print(f'Logado com sucesso, {user}!')
+    else:
+        print('Login falhou! \n')
+
+
+def excluir():
+    with open('registros.txt', 'r') as fr:
+        lines = fr.readlines()
+        ptr = 1
+        # Tem que rodar 2 vezes pra apagar a senha tbm :(
+        ptr_del = int(input('Escolha a linha que quer excluir(Verifique no registros.txt): '))
+
+        with open('registros.txt', 'w') as fw:
+            for line in lines:
+                if ptr != ptr_del:
+                    fw.write(line)
+                ptr += 1
+    print("Deletado!")
+
+
+def alterar():
+    search_text = input('Confirme seu usuário: ')
+    replace_text = input('Coloque o usuário novo: ')
+  
+    with open('registros.txt', 'r') as f:
+        data = f.read()    
+    
+    data = data.replace(search_text, replace_text)
+  
+    with open('registros.txt', 'w') as f:
+        f.write(data)
+
+    print("Nome de usuário troca com sucesso!")
+
+
+while True:
+    print("********** Sistema de Login **********")
+    print("1.Registrar")
+    print("2.Login")
+    print("3.Excluir")
+    print("4.Alterar")
+    print("5.Sair")
+    ch = int(input("Escolha: "))
+    if ch == 1:
+        registrar()
+    elif ch == 2:
+        login()
+    elif ch == 3:
+        excluir()
+    elif ch == 4:
+        alterar()
+    elif ch == 5:
+        break
+    else:
+        print("Escolha uma opção válida!")
